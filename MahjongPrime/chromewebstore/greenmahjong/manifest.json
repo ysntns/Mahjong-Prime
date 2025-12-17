@@ -1,20 +1,19 @@
 {
-    "name": "Green Mahjong",
-    "description": "Green Mahjong is a solitaire Mahjong game. The goal is to match open pairs of identical tiles and remove them from the board.",
-    "manifest_version": 2, 
-    "version": "2",
+    "name": "Mahjong-Prime",
+    "description": "Mahjong-Prime is a solitaire Mahjong game. The goal is to match open pairs of identical tiles and remove them from the board.",
+    "manifest_version": 2,
+    "version": "2.4",
     "app": {
         "urls": [
-            "http://daniel-beck.org/greenmahjong/"
-			],
+            "https://cerebrai-vortx.dev/mahjongprime/"
+        ],
         "launch": {
-            "web_url": "http://daniel-beck.org/greenmahjong/"
+            "web_url": "https://cerebrai-vortx.dev/mahjongprime/"
         }
     },
     "icons": {
-        "128": "greenmahjong128.png"
+        "128": "mahjongprime128.png"
     },
-    "offline_enabled":true,
-    "permissions": [
-    ]
+    "offline_enabled": true,
+    "permissions": []
 }

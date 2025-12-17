@@ -1,6 +1,6 @@
 {
     "architecture": "all",
-    "description": "Green Mahjong is a solitaire mahjong game",
+    "description": "Mahjong-Prime is a solitaire mahjong game",
     "framework": "ubuntu-sdk-14.10-dev2",
     "hooks": {
         "app": {
@@ -8,8 +8,8 @@
             "desktop": "app.desktop"
         }
     },
-    "maintainer": "Daniel Beck <d.danielbeck@googlemail.com>",
-    "name": "com.ubuntu.developer.danielbeck.greenmahjong",
-    "title": "Green Mahjong",
+    "maintainer": "Yasin Tanış & CerebrAI-VorTX",
+    "name": "com.ubuntu.developer.yasintanis.mahjongprime",
+    "title": "Mahjong-Prime",
     "version": "2.2.1"
 }
