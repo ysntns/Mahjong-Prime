@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id = "de.beck.greenmahjong"
+        id = "com.cerebrai.mahjongprime"
         version = "2.4.0"
         versionCode="52"> 
     <name>Mahjong-Prime</name>
