@@ -12,3 +12,4 @@ http://greenmahjong.daniel-beck.org
 Green Mahjong in the Google Play Store: https://play.google.com/store/apps/details?id=de.beck.greenmahjong
 
 Green Mahjong in the Apple App Store: https://itunes.apple.com/app/id933634500
+# Mahjong-Prime
