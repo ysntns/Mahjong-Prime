@@ -1,6 +1,6 @@
 {
   "name": "mahjong-prime",
-  "version": "1.0.0",
+  "version": "2.4.2",
   "description": "green-mahjong =============",
   "main": "index.js",
   "scripts": {

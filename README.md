@@ -155,6 +155,9 @@ Sanliurfa, Turkey
 
 ## Changelog
 
+### Version 2.4.2
+- Various bug fixes and improvements
+
 ### Version 2.4.1
 - Various bug fixes and improvements
 
