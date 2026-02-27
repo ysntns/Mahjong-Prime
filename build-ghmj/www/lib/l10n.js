@@ -994,7 +994,7 @@ document.webL10n = (function(window, document, undefined) {
       window.setTimeout(l10nStartup);
     }
   } else if (window.attachEvent) { // IE8 and before (= oldIE)
-    // TODO: check if jQuery is loaded (CSS selector + JSON + events)
+    // check if jQuery is loaded (CSS selector + JSON + events)
 
     // dummy `console.log' and `console.warn' functions
     if (!window.console) {
@@ -1030,67 +1030,105 @@ document.webL10n = (function(window, document, undefined) {
 
     // worst hack ever for IE6 and IE7
     if (!window.JSON) {
-      getL10nAttributes = function(element) {
-        if (!element)
-          return {};
-        var l10nId = element.getAttribute('data-l10n-id'),
-            l10nArgs = element.getAttribute('data-l10n-args'),
-            args = {};
-        if (l10nArgs) try {
-          args = eval(l10nArgs); // XXX yeah, I know...
-        } catch (e) {
-          consoleWarn('could not parse arguments for #' + l10nId);
-        }
-        return { id: l10nId, args: args };
-      };
+      if (window.jQuery) {
+        getL10nAttributes = function(element) {
+          if (!element)
+            return {};
+          var l10nId = element.getAttribute('data-l10n-id'),
+              l10nArgs = element.getAttribute('data-l10n-args'),
+              args = {};
+          if (l10nArgs) try {
+            args = jQuery.parseJSON(l10nArgs);
+          } catch (e) {
+            consoleWarn('could not parse arguments for #' + l10nId);
+          }
+          return { id: l10nId, args: args };
+        };
+      } else {
+        getL10nAttributes = function(element) {
+          if (!element)
+            return {};
+          var l10nId = element.getAttribute('data-l10n-id'),
+              l10nArgs = element.getAttribute('data-l10n-args'),
+              args = {};
+          if (l10nArgs) try {
+            args = eval(l10nArgs); // XXX yeah, I know...
+          } catch (e) {
+            consoleWarn('could not parse arguments for #' + l10nId);
+          }
+          return { id: l10nId, args: args };
+        };
+      }
     }
 
     // override `getTranslatableChildren' and `getL10nResourceLinks'
     if (!document.querySelectorAll) {
-      getTranslatableChildren = function(element) {
-        if (!element)
-          return [];
-        var nodes = element.getElementsByTagName('*'),
-            l10nElements = [],
-            n = nodes.length;
-        for (var i = 0; i < n; i++) {
-          if (nodes[i].getAttribute('data-l10n-id'))
-            l10nElements.push(nodes[i]);
-        }
-        return l10nElements;
-      };
-      getL10nResourceLinks = function() {
-        var links = document.getElementsByTagName('link'),
-            l10nLinks = [],
-            n = links.length;
-        for (var i = 0; i < n; i++) {
-          if (links[i].type == 'application/l10n')
-            l10nLinks.push(links[i]);
-        }
-        return l10nLinks;
-      };
+      if (window.jQuery) {
+        getTranslatableChildren = function(element) {
+          return element ? jQuery(element).find('*[data-l10n-id]').get() : [];
+        };
+        getL10nResourceLinks = function() {
+          return jQuery('link[type="application/l10n"]').get();
+        };
+      } else {
+        getTranslatableChildren = function(element) {
+          if (!element)
+            return [];
+          var nodes = element.getElementsByTagName('*'),
+              l10nElements = [],
+              n = nodes.length;
+          for (var i = 0; i < n; i++) {
+            if (nodes[i].getAttribute('data-l10n-id'))
+              l10nElements.push(nodes[i]);
+          }
+          return l10nElements;
+        };
+        getL10nResourceLinks = function() {
+          var links = document.getElementsByTagName('link'),
+              l10nLinks = [],
+              n = links.length;
+          for (var i = 0; i < n; i++) {
+            if (links[i].type == 'application/l10n')
+              l10nLinks.push(links[i]);
+          }
+          return l10nLinks;
+        };
+      }
     }
 
     // override `getL10nDictionary'
     if (!window.JSON || !document.querySelectorAll) {
       getL10nDictionary = function() {
-        var scripts = document.getElementsByName('script');
-        for (var i = 0; i < scripts.length; i++) {
-          if (scripts[i].type == 'application/l10n') {
-            return eval(scripts[i].innerHTML);
+        if (window.jQuery) {
+          var script = jQuery('script[type="application/l10n"]');
+          return script.length ? jQuery.parseJSON(script.html()) : null;
+        } else {
+          var scripts = document.getElementsByName('script');
+          for (var i = 0; i < scripts.length; i++) {
+            if (scripts[i].type == 'application/l10n') {
+              return eval(scripts[i].innerHTML);
+            }
           }
+          return null;
         }
-        return null;
       };
     }
 
     // fire non-standard `localized' DOM events
     if (document.createEventObject && !document.createEvent) {
-      fireL10nReadyEvent = function(lang) {
-        // hack to simulate a custom event in IE:
-        // to catch this event, add an event handler to `onpropertychange'
-        document.documentElement.localized = 1;
-      };
+      if (window.jQuery) {
+        fireL10nReadyEvent = function(lang) {
+          var e = jQuery.Event('localized');
+          e.language = lang;
+          jQuery(document).trigger(e);
+        };
+      } else {
+        fireL10nReadyEvent = function(lang) {
+          // hack to simulate a custom event in IE:
+          // to catch this event, add an event handler to `onpropertychange'
+          document.documentElement.localized = 1;
+        };
+      }
     }
 
     // startup for IE<9
@@ -1140,11 +1178,15 @@ document.webL10n = (function(window, document, undefined) {
       } else if (document.addEventListener) {
         document.addEventListener('localized', callback);
       } else if (document.attachEvent) {
-        document.documentElement.attachEvent('onpropertychange', function(e) {
-          if (e.propertyName === 'localized') {
-            callback();
-          }
-        });
+        if (window.jQuery) {
+          jQuery(document).on('localized', callback);
+        } else {
+          document.documentElement.attachEvent('onpropertychange', function(e) {
+            if (e.propertyName === 'localized') {
+              callback();
+            }
+          });
+        }
       }
     }
   };
