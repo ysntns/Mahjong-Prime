@@ -1,7 +1,7 @@
 {
-  "name": "de.beck.greenmahjong",
-  "displayName": "Green Mahjong",
-  "version": "1.0.0",
+  "name": "com.cerebrai.mahjongprime",
+  "displayName": "Mahjong-Prime",
+  "version": "2.4.0",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {

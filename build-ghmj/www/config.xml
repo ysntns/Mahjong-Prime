@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id = "de.beck.greenmahjong"
+        id = "com.cerebrai.mahjongprime"
         version = "2.4.0"
         versionCode="52"> 
     <name>Mahjong-Prime</name>
@@ -11,7 +11,13 @@
     
     <description>Mahjong-Prime is a nice opensource mahjong game.</description> 
     <author href="https://cerebrai-vortx.dev">Yasin Tanış &amp; CerebrAI-VorTX</author>
-    <access origin="*" />
+    <access origin="none" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
     <content src="index.html" />
     <!--<platform name="ios">-->
     <!-- iOS 7.0+ -->
