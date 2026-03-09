@@ -591,9 +591,11 @@ function isMatchPattern() {
 
 function removeTookCards() {
     var index;
+    var $cards = $(".card");
+    var $shadows = $(".shadow");
     $(".card-removed").each(function (index) {
-        index = $(".card").index($(this));
-        $(".shadow").eq(index).css({"visibility": "hidden"});
+        index = $cards.index($(this));
+        $shadows.eq(index).css({"visibility": "hidden"});
     });
 
     var removedCards = $(".card-removed");
