@@ -81,10 +81,77 @@ document.webL10n = (function(window, document, undefined) {
     return document.querySelectorAll('link[type="application/l10n"]');
   }
 
-  function getL10nDictionary() {
-    var script = document.querySelector('script[type="application/l10n"]');
-    // TODO: support multiple and external JSON dictionaries
-    return script ? JSON.parse(script.innerHTML) : null;
+  function loadL10nDictionaries(callback) {
+    var scripts = document.querySelectorAll('script[type="application/l10n"]');
+    var dict = { locales: {}, default_locale: '' };
+    var scriptsCount = scripts.length;
+
+    if (scriptsCount === 0) {
+      callback(null);
+      return;
+    }
+
+    var loadedCount = 0;
+
+    function mergeDict(newDict) {
+      if (!newDict) return;
+      if (newDict.default_locale && !dict.default_locale) {
+        dict.default_locale = newDict.default_locale;
+      }
+      if (newDict.locales) {
+        for (var loc in newDict.locales) {
+          if (Object.prototype.hasOwnProperty.call(newDict.locales, loc) && loc !== '__proto__' && loc !== 'constructor' && loc !== 'prototype') {
+            if (!dict.locales[loc]) {
+              dict.locales[loc] = {};
+            }
+            var keys = newDict.locales[loc];
+            for (var key in keys) {
+              if (Object.prototype.hasOwnProperty.call(keys, key) && key !== '__proto__' && key !== 'constructor' && key !== 'prototype') {
+                dict.locales[loc][key] = keys[key];
+              }
+            }
+          }
+        }
+      }
+    }
+
+    function checkDone() {
+      loadedCount++;
+      if (loadedCount >= scriptsCount) {
+        callback(dict);
+      }
+    }
+
+    for (var i = 0; i < scriptsCount; i++) {
+      (function(script) {
+        if (script.src) {
+          xhrLoadText(script.src, function(content) {
+            try {
+              var parsed = JSON.parse(content);
+              if (typeof parsed === 'object' && !Array.isArray(parsed)) {
+                mergeDict(parsed);
+              }
+            } catch (e) {
+              consoleWarn('could not parse external dictionary at ' + script.src);
+            }
+            checkDone();
+          }, function() {
+            consoleWarn('could not load external dictionary at ' + script.src);
+            checkDone();
+          }, gAsyncResourceLoading);
+        } else {
+          try {
+            var parsed = JSON.parse(script.innerHTML);
+            if (typeof parsed === 'object' && !Array.isArray(parsed)) {
+              mergeDict(parsed);
+            }
+          } catch (e) {
+            consoleWarn('could not parse inline dictionary');
+          }
+          checkDone();
+        }
+      })(scripts[i]);
+    }
   }
 
   function getTranslatableChildren(element) {
@@ -296,17 +363,18 @@ document.webL10n = (function(window, document, undefined) {
     var langCount = langLinks.length;
     if (langCount == 0) {
       // we might have a pre-compiled dictionary instead
-      var dict = getL10nDictionary();
-      if (dict && dict.locales && dict.default_locale) {
-        consoleLog('using the embedded JSON directory, early way out');
-        gL10nData = dict.locales[lang] || dict.locales[dict.default_locale];
-        callback();
-      } else {
-        consoleLog('no resource to load, early way out');
-      }
-      // early way out
-      fireL10nReadyEvent(lang);
-      gReadyState = 'complete';
+      loadL10nDictionaries(function(dict) {
+        if (dict && dict.locales && dict.default_locale) {
+          consoleLog('using the embedded JSON directory, early way out');
+          gL10nData = dict.locales[lang] || dict.locales[dict.default_locale];
+          callback();
+        } else {
+          consoleLog('no resource to load, early way out');
+        }
+        // early way out
+        fireL10nReadyEvent(lang);
+        gReadyState = 'complete';
+      });
       return;
     }
 
@@ -1071,16 +1139,49 @@ document.webL10n = (function(window, document, undefined) {
       };
     }
 
-    // override `getL10nDictionary'
+    // override `loadL10nDictionaries'
     if (!window.JSON || !document.querySelectorAll) {
-      getL10nDictionary = function() {
+      loadL10nDictionaries = function(callback) {
         var scripts = document.getElementsByName('script');
-        for (var i = 0; i < scripts.length; i++) {
-          if (scripts[i].type == 'application/l10n') {
-            return eval(scripts[i].innerHTML);
+        var dict = { locales: {}, default_locale: '' };
+        var found = false;
+
+        function mergeDict(newDict) {
+          if (!newDict) return;
+          found = true;
+          if (newDict.default_locale && !dict.default_locale) {
+            dict.default_locale = newDict.default_locale;
+          }
+          if (newDict.locales) {
+            for (var loc in newDict.locales) {
+              if (Object.prototype.hasOwnProperty.call(newDict.locales, loc) && loc !== '__proto__' && loc !== 'constructor' && loc !== 'prototype') {
+                if (!dict.locales[loc]) {
+                  dict.locales[loc] = {};
+                }
+                var keys = newDict.locales[loc];
+                for (var key in keys) {
+                  if (Object.prototype.hasOwnProperty.call(keys, key) && key !== '__proto__' && key !== 'constructor' && key !== 'prototype') {
+                    dict.locales[loc][key] = keys[key];
+                  }
+                }
+              }
+            }
           }
         }
-        return null;
+
+        for (var i = 0; i < scripts.length; i++) {
+          if (scripts[i].type == 'application/l10n') {
+            try {
+              var parsed = eval(scripts[i].innerHTML);
+              if (typeof parsed === 'object' && !Array.isArray(parsed)) {
+                mergeDict(parsed);
+              }
+            } catch (e) {
+              consoleWarn('could not parse inline dictionary in IE fallback');
+            }
+          }
+        }
+        callback(found ? dict : null);
       };
     }
 
