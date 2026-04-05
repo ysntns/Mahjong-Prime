@@ -351,8 +351,15 @@ document.webL10n = (function(window, document, undefined) {
     gL10nData = {};
     gTextData = '';
     gLanguage = '';
-    // TODO: clear all non predefined macros.
-    // There's no such macro /yet/ but we're planning to have some...
+
+    // clear all non-predefined macros.
+    for (var key in gMacros) {
+      if (gMacros.hasOwnProperty(key)) {
+        if (key !== 'plural' && key !== '_pluralRules') {
+          delete gMacros[key];
+        }
+      }
+    }
   }
 
 
