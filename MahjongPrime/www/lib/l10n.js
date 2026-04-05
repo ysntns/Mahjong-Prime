@@ -199,11 +199,11 @@ document.webL10n = (function(window, document, undefined) {
       var reComment = /^\s*#|^\s*$/;
       var reSection = /^\s*\[(.*)\]\s*$/;
       var reImport = /^\s*@import\s+url\((.*)\)\s*$/i;
-      var reSplit = /^([^=\s]*)\s*=\s*(.+)$/; // TODO: escape EOLs with '\'
+      var reSplit = /^([^=\s]*)\s*=\s*(.*)$/;
 
       // parse the *.properties file into an associative array
       function parseRawLines(rawText, extendedSyntax) {
-        var entries = rawText.replace(reBlank, '').split(/[\r\n]+/);
+        var entries = rawText.replace(reBlank, '').replace(/\\(?:\r\n|\n|\r)\s*/g, '').split(/[\r\n]+/);
         var currentLang = '*';
         var genericLang = lang.replace(/-[a-z]+$/i, '');
         var skipLang = false;
