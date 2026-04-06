@@ -1,4 +1,6 @@
-matchingGame = matchingGame ||{};
+// Copyright (c) 2025 CerebrAI-VorTX
+"use strict";
+var matchingGame = matchingGame ||{};
 
 matchingGame.cloud= {};
 matchingGame.cloud.positionX = [

@@ -1,11 +1,9 @@
+// Copyright (c) 2025 CerebrAI-VorTX
+"use strict";
 var points = points || {};
 
 points.elapsedTime = 30;
 points.gameWon = true;
-points.layout;
-points.undoUsed;
-points.hintsUsed;
-points.points;
 
 function Points(elapsedTime, gameWon, layout, undoUsed, hintsUsed, points) {
     this.elapsedTime = elapsedTime;
@@ -17,7 +15,6 @@ function Points(elapsedTime, gameWon, layout, undoUsed, hintsUsed, points) {
 }
 
 Points.prototype.saveGameStatistics = function() {
-    console.log("saveGameStatistics");
     var gameStatistics = getGameStatistics();
     gameStatistics.updateStatistics(this.elapsedTime, this.gameWon, this.layout, this.undoUsed, this.hintsUsed, this.points);
     localStorage.setItem("gameStatistics", JSON.stringify(gameStatistics));
@@ -27,7 +24,6 @@ function getGameStatistics() {
     var gameStatistics = new GameStatistics(JSON.parse(localStorage.getItem("gameStatistics")));
     return gameStatistics;
 }
-;
 
 var gameStatistics = gameStatistics || {};
 
@@ -69,8 +65,12 @@ function GameStatistics(jsonObject) {
         this.numberOfGamesWonWithoutUndoOrHints = 0;
         this.highScore = 0;
     } else {
-        for (var prop in jsonObject)
-            this[prop] = jsonObject[prop];
+        var allowedProps = ['numberOfGamesWon', 'numberOfGamesLost', 'numberOfGamesWonWithHints', 'numberOfGamesLostWithHints', 'highScore', 'totalScore', 'numberOfGamesPlayed'];
+        for (var prop in jsonObject) {
+            if (allowedProps.indexOf(prop) !== -1) {
+                this[prop] = jsonObject[prop];
+            }
+        }
     }
 }
 
@@ -103,11 +103,11 @@ GameStatistics.prototype.updateStatistics = function(elapsedTime, gameWon, layou
         if (!hintsUsed) {
             this.numberOfGamesWonWithoutHints++;
         }
-        
+
         if (!undoUsed && !hintsUsed){
             this.numberOfGamesWonWithoutUndoOrHints++;
         }
-        
+
     } else {
         var sumOfElapsedSeconds = (this.numberOfGames - this.numberOfGamesWon - 1) * this.averageLosingTime;
         this.averageLosingTime = (sumOfElapsedSeconds + elapsedTime) / (this.numberOfGames - this.numberOfGamesWon);
@@ -124,7 +124,7 @@ GameStatistics.prototype.updateStatistics = function(elapsedTime, gameWon, layou
             this.numberOfGamesLostWithUndo++;
         }
 
-        if (!hintsUsed) {
+        if (hintsUsed) {
             this.numberOfGamesLostWithHints++;
         }
     }
@@ -132,15 +132,14 @@ GameStatistics.prototype.updateStatistics = function(elapsedTime, gameWon, layou
     if (points > this.highScore) {
         this.highScore = points;
     }
-    
+
     if (this.averageWinningTime > 0 && this.averageLosingTime > 0){
         this.averagePlayTime = (this.averageWinningTime + this.averageLosingTime) / 2;
     } else {
         this.averagePlayTime = this.averageWinningTime + this.averageLosingTime;
     }
-    
+
     if (this.layoutsPlayed.indexOf(layout) < 0) {
             this.layoutsPlayed.unshift(layout);
         }
 };
-

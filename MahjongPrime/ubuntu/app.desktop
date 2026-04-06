@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Mahjong-Prime
-Comment=Mahjong-Prime is a solitaire mahjong game
-Type=Application
-Icon=mahjongprime.png
-Exec=webapp-container --store-session-cookies --webappUrlPatterns=https?://cerebrai-vortx.dev/* https://cerebrai-vortx.dev/mahjongprime %u
-Terminal=false
-X-Ubuntu-Touch=true
-

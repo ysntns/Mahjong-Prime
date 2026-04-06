@@ -1,3 +1,5 @@
+// Copyright (c) 2025 CerebrAI-VorTX
+"use strict";
 var matchingGame = matchingGame ||{};
 
 matchingGame.flower = {};

@@ -84,7 +84,7 @@ document.webL10n = (function(window, document, undefined) {
   function getL10nDictionary() {
     var script = document.querySelector('script[type="application/l10n"]');
     // TODO: support multiple and external JSON dictionaries
-    return script ? JSON.parse(script.innerHTML) : null;
+    return script ? JSON.parse(script.textContent) : null;
   }
 
   function getTranslatableChildren(element) {
@@ -969,9 +969,7 @@ document.webL10n = (function(window, document, undefined) {
   function l10nStartup() {
     gReadyState = 'interactive';
 
-    // most browsers expose the UI language as `navigator.language'
-    // but IE uses `navigator.userLanguage' instead
-    var userLocale = navigator.language || navigator.userLanguage;
+    var userLocale = navigator.language;
     consoleLog('loading [' + userLocale + '] resources, ' +
         (gAsyncResourceLoading ? 'asynchronously.' : 'synchronously.'));
 
@@ -983,121 +981,11 @@ document.webL10n = (function(window, document, undefined) {
     }
   }
 
-  // browser-specific startup
-  if (document.addEventListener) { // modern browsers and IE9+
-    if (document.readyState === 'loading') {
-      // the document is not fully loaded yet: wait for DOMContentLoaded.
-      document.addEventListener('DOMContentLoaded', l10nStartup);
-    } else {
-      // l10n.js is being loaded with <script defer> or <script async>,
-      // the DOM is ready for parsing.
-      window.setTimeout(l10nStartup);
-    }
-  } else if (window.attachEvent) { // IE8 and before (= oldIE)
-    // TODO: check if jQuery is loaded (CSS selector + JSON + events)
-
-    // dummy `console.log' and `console.warn' functions
-    if (!window.console) {
-      consoleLog = function(message) {}; // just ignore console.log calls
-      consoleWarn = function(message) {
-        if (gDEBUG) {
-          alert('[l10n] ' + message); // vintage debugging, baby!
-        }
-      };
-    }
-
-    // XMLHttpRequest for IE6
-    if (!window.XMLHttpRequest) {
-      xhrLoadText = function(url, onSuccess, onFailure, asynchronous) {
-        onSuccess = onSuccess || function _onSuccess(data) {};
-        onFailure = onFailure || function _onFailure() {
-          consoleWarn(url + ' not found.');
-        };
-        var xhr = new ActiveXObject('Microsoft.XMLHTTP');
-        xhr.open('GET', url, asynchronous);
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
-            if (xhr.status == 200) {
-              onSuccess(xhr.responseText);
-            } else {
-              onFailure();
-            }
-          }
-        };
-        xhr.send(null);
-      }
-    }
-
-    // worst hack ever for IE6 and IE7
-    if (!window.JSON) {
-      getL10nAttributes = function(element) {
-        if (!element)
-          return {};
-        var l10nId = element.getAttribute('data-l10n-id'),
-            l10nArgs = element.getAttribute('data-l10n-args'),
-            args = {};
-        if (l10nArgs) try {
-          args = eval(l10nArgs); // XXX yeah, I know...
-        } catch (e) {
-          consoleWarn('could not parse arguments for #' + l10nId);
-        }
-        return { id: l10nId, args: args };
-      };
-    }
-
-    // override `getTranslatableChildren' and `getL10nResourceLinks'
-    if (!document.querySelectorAll) {
-      getTranslatableChildren = function(element) {
-        if (!element)
-          return [];
-        var nodes = element.getElementsByTagName('*'),
-            l10nElements = [],
-            n = nodes.length;
-        for (var i = 0; i < n; i++) {
-          if (nodes[i].getAttribute('data-l10n-id'))
-            l10nElements.push(nodes[i]);
-        }
-        return l10nElements;
-      };
-      getL10nResourceLinks = function() {
-        var links = document.getElementsByTagName('link'),
-            l10nLinks = [],
-            n = links.length;
-        for (var i = 0; i < n; i++) {
-          if (links[i].type == 'application/l10n')
-            l10nLinks.push(links[i]);
-        }
-        return l10nLinks;
-      };
-    }
-
-    // override `getL10nDictionary'
-    if (!window.JSON || !document.querySelectorAll) {
-      getL10nDictionary = function() {
-        var scripts = document.getElementsByName('script');
-        for (var i = 0; i < scripts.length; i++) {
-          if (scripts[i].type == 'application/l10n') {
-            return eval(scripts[i].innerHTML);
-          }
-        }
-        return null;
-      };
-    }
-
-    // fire non-standard `localized' DOM events
-    if (document.createEventObject && !document.createEvent) {
-      fireL10nReadyEvent = function(lang) {
-        // hack to simulate a custom event in IE:
-        // to catch this event, add an event handler to `onpropertychange'
-        document.documentElement.localized = 1;
-      };
-    }
-
-    // startup for IE<9
-    window.attachEvent('onload', function() {
-      gTextProp = document.body.textContent ? 'textContent' : 'innerText';
-      l10nStartup();
-    });
+  // browser startup
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', l10nStartup);
+  } else {
+    window.setTimeout(l10nStartup);
   }
 
   // cross-browser API (sorry, oldIE doesn't support getters & setters)
@@ -1137,14 +1025,8 @@ document.webL10n = (function(window, document, undefined) {
         return;
       } else if (gReadyState == 'complete' || gReadyState == 'interactive') {
         window.setTimeout(callback);
-      } else if (document.addEventListener) {
+      } else {
         document.addEventListener('localized', callback);
-      } else if (document.attachEvent) {
-        document.documentElement.attachEvent('onpropertychange', function(e) {
-          if (e.propertyName === 'localized') {
-            callback();
-          }
-        });
       }
     }
   };

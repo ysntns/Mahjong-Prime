@@ -1,2 +1,31 @@
-/GreenMahjong/build-greenmahjong-UbuntuSDK_for_armhf_GCC_ubuntu_sdk_14_10_utopic-default/
+# Build artifacts
+build-ghmj/
 platforms/
+releases/
+*.aab
+*.apk
+*.jar
+
+# IDE files
+nbproject/
+.idea/
+*.iml
+*.ubuntuhtmlproject.user
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temp files
+*.log
+*.tmp
+
+# Old build paths
+/MahjongPrime/build-UbuntuSDK_for_armhf_GCC_ubuntu_sdk_14_10_utopic-default/
+
+# Tool files
+.chippery/

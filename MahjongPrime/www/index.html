@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html  manifest="greenmahjong.appcache">
-  <!--<html>-->  
+<html lang="en">  
   <head>
 
     <!--
     Mahjong-Prime
     Copyright (c) 2024-2025 Yasin Tanis & CerebrAI-VorTX
 
-    Original Design: Daniel Beck and Karin Beck (2014)
+    Original Design: Daniel Beck and Karin Beck (2014) - Green Mahjong
 
-    This file is part of Mahjong-Prime.
+    This file is part of Mahjong Prime (by CerebrAI-VorTX).
 
     Mahjong-Prime is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,7 +31,9 @@
     <meta charset="UTF-8">
     <link rel="resource" type="application/l10n" href="js/local/locales.ini" />
 
-    <meta id="Viewport" name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta id="Viewport" name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes">
+    <meta name="description" content="Mahjong Prime - A beautiful HTML5 Mahjong Solitaire game by CerebrAI-VorTX">
+    <meta name="theme-color" content="#2f3d0d">
     <!--<link rel="stylesheet" href="lib/animate.min.css">-->
     <link href="css/mahjong.css" rel="stylesheet"/>
     <link href="css/normalize.css" rel="stylesheet"/>
@@ -262,21 +263,18 @@
     <div id="timer">00:00</div>
     <span class="points"><span data-l10n-id="points">Points: </span><span id="points">0</span></span>
 
-    <div class="outer" id="gameScene" data-page="game" data-back-options="startNewGame">
+    <main class="outer" id="gameScene" data-page="game" data-back-options="startNewGame">
       <section id="game" class="middle">
         <!--<div id="timer" class="inner">Test</div>-->
-        <div id="cards" class="inner">      
+        <div id="cards" class="inner">
           <div class="card">
           </div>
           <div class="shadow"></div>
         </div>
       </section>
-    </div>
+    </main>
 
-    <script src='lib/fastclick.js'></script>
     <script src="lib/jquery/jquery-2.1.0.min.js"></script>
-    <script src="lib/jquery.fastclick.js"></script>
-    <script src="lib/underscore-min.js"></script>
     <script src="lib/l10n.js"></script>
     <script src="lib/sparouter.js"></script>
     <script src="js/flower.js"></script>

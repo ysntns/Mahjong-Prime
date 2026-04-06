@@ -135,8 +135,8 @@ See the [LICENSE](MahjongPrime/COPYING) file for details.
 ## Credits
 
 ### Original Design
-- Daniel Beck and Karin Beck (2014)
-- Original project: Green Mahjong
+- Originally based on Green Mahjong (2014) by Daniel Beck and Karin Beck
+- Rebranded and maintained as Mahjong Prime by CerebrAI-VorTX
 
 ### Current Maintainer
 **Yasin Tanis**
