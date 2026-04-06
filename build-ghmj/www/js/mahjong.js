@@ -343,7 +343,7 @@ function startGame() {
     var zIndexBase = 8;
 
     for (var i = 0; i < (numberOfCards - 1); i++) {
-        $("#cards").append('<div class="card"></div>');
+        $("#cards").append('<div class="card" data-index="' + (i + 1) + '"></div>');
         $("#cards").append('<div class="shadow"></div>');
     }
 
@@ -590,13 +590,19 @@ function isMatchPattern() {
 }
 
 function removeTookCards() {
-    var index;
-    $(".card-removed").each(function (index) {
-        index = $(".card").index($(this));
-        $(".shadow").eq(index).css({"visibility": "hidden"});
-    });
-
     var removedCards = $(".card-removed");
+    var shadows = $(".shadow");
+
+    removedCards.each(function () {
+        var index = $(this).data('index');
+        if (index !== undefined) {
+            shadows.eq(index).css({"visibility": "hidden"});
+        } else {
+            // Fallback just in case
+            index = $(".card").index($(this));
+            shadows.eq(index).css({"visibility": "hidden"});
+        }
+    });
     removeCardsFromSelectableCards(removedCards);
     matchingGame.undoList.unshift(removedCards);
 
@@ -686,7 +692,7 @@ function removeCardsFromArray(cardsToRemove, cards) {
 }
 
 function updateSelectableAndMatchingCards(removedCards) {
-    var neighbours;
+    var neighbours = $();
     var leftNeighbours;
     var rightNeighbours;
     var underlayingNeighbours;
@@ -704,7 +710,7 @@ function updateSelectableAndMatchingCards(removedCards) {
         underlayingNeighbours = getUnderlayingNeighbours(positionX, positionY, shift);
 
         var allNeighbours = leftNeighbours.add(rightNeighbours).add(underlayingNeighbours);
-        if (neighbours !== undefined) {
+        if (neighbours && neighbours.length !== undefined) {
             neighbours = neighbours.add(allNeighbours);
         }
         else {
@@ -800,7 +806,7 @@ function showWinningMessage() {
 }
 function startNewGame() {
     $("#cards").empty();
-    $("#cards").append('<div class="card"></div>');
+    $("#cards").append('<div class="card" data-index="0"></div>');
     $("#cards").append('<div class="shadow"></div>');
     matchingGame.undoList = [];
     hideMessages();
