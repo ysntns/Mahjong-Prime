@@ -1,6 +1,6 @@
 "use strict";
 
-var CACHE_NAME = 'mahjong-prime-v2.4.0';
+var CACHE_NAME = 'mahjong-prime-v3.0.0';
 var urlsToCache = [
     './',
     './index.html',

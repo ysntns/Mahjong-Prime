@@ -1,6 +1,6 @@
 {
   "name": "mahjong-prime",
-  "version": "2.5.0",
+  "version": "3.0.0",
   "private": true,
   "description": "Mahjong Prime - A cross-platform HTML5 solitaire Mahjong game",
   "main": "index.js",

@@ -2,8 +2,8 @@
 <widget xmlns = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id = "com.cerebrai.mahjongprime"
-        version = "2.5.0"
-        versionCode="53">
+        version = "3.0.0"
+        versionCode="30000">
     <name>Mahjong-Prime</name>
 
     <preference name="permissions" value="none"/>
