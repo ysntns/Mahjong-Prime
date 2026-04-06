@@ -1,16 +1,48 @@
-Find the matching pairs in this solitaire mahjong game!
+Mahjong Prime - Solitaire Puzzle
 
-Mahjong-Prime is a free and opensource solitaire mahjong game (also sometime referred as mahjongg). It features three
-nice looking themes (fruits, classic, modern) and six layouts of varying difficulty. The goal of the game is to 
-match open pairs of identical tiles and remove them from the board, exposing the tiles under them for play. 
-The game is finished when all pairs of tiles have been removed from the board or when there are no exposed pairs 
-remaining.
+Short Description:
+Classic Mahjong Solitaire with 6 layouts, 3 themes, and offline play!
 
-The game looks good on phones and on tablets thanks to its HD graphics. 
+Full Description:
+Mahjong Prime is a beautifully crafted, free, and open source Mahjong Solitaire game. Match open pairs of identical tiles and remove them from the board to reveal the tiles beneath. Clear all pairs to win!
 
-Features:
-- hints
-- undo
-- 6 layouts
-- 3 themes
-- animations
+Designed for both phones and tablets with HD graphics that look stunning on any screen size.
+
+FEATURES:
+
+6 Unique Layouts:
+- Turtle - The timeless classic layout
+- Flower - An elegant floral arrangement
+- Spider - A challenging web of tiles
+- Cloud - A flowing, airy design
+- Bug - A fun insect-shaped puzzle
+- Four Hills - A scenic mountain formation
+
+3 Beautiful Themes:
+- Classic - Traditional Mahjong tile designs
+- Fruits - Colorful fruit-themed tiles
+- High Visibility - Bold, easy-to-read tiles for accessibility
+
+9 Languages:
+English, French, German, Spanish, Portuguese, Italian, Dutch, Turkish, and Russian
+
+Gameplay Features:
+- Hints to help you find matching pairs
+- Undo moves when you make a mistake
+- Smooth animations and transitions
+- Game statistics and achievements tracking
+- Timer and move counter
+
+Privacy & Respect:
+- Works completely offline - no internet required
+- No ads - ever
+- No tracking or analytics
+- No in-app purchases
+- No special permissions required
+- All game data stored locally on your device only
+
+Open Source:
+Mahjong Prime is licensed under GPLv3. View the source code and contribute on GitHub:
+https://github.com/ysntns/Mahjong-Prime
+
+Developed by CerebrAI-VorTX (Yasin Tanis)

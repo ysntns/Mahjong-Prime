@@ -1,10 +1,13 @@
 {
   "name": "mahjong-prime",
-  "version": "1.0.0",
+  "version": "2.5.0",
+  "private": true,
   "description": "Mahjong Prime - A cross-platform HTML5 solitaire Mahjong game",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd build-ghmj && cordova build android",
+    "sync": "rm -rf build-ghmj/www && cp -r MahjongPrime/www build-ghmj/www"
   },
   "keywords": [],
   "author": "",

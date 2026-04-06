@@ -227,16 +227,15 @@
 
     <div id="versionInformationDialog">
       <section>
-        <h1>Welcome to Mahjong-Prime version 2.0</h1>
-        <h2>Changelog version 2.0</h2>
-        <ul><li>Layout! Choose between the layout "turtle", "spider", "cloud" and "flower"</li>
-          <li>The theme "high visibility"</li>
-          <li>Theme "classic" was greatly improved</li>
-          <li>Animations</li>
-          <li>The game can be used Offline</li>
-          <li>The game board is now centered on chrome, too </li>
-          <li>Speed improvements on FirefoxOS.</li>
-          <li>Localization in the following languages: polish, french, german, bulgarian, portuguese and spanish.</li>
+        <h1>Mahjong Prime v2.5.0</h1>
+        <h2>What's New in v2.5.0</h2>
+        <ul>
+          <li>Modern UI design with smooth animations</li>
+          <li>Turkish language support added</li>
+          <li>Improved performance and security</li>
+          <li>Offline support via Service Worker</li>
+          <li>Removed obsolete platform dependencies</li>
+          <li>9 languages supported: EN, DE, ES, FR, PT, PL, BG, ZH, TR</li>
         </ul>
       </section>
       <!--<a id="hideVersionInformation" class="button">OK</a>-->
@@ -285,5 +284,10 @@
     <script src="js/bug.js"></script>
     <script src="js/pointCalculation.js"></script>
     <script src="js/mahjong.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(function() {});
+}
+</script>
   </body>
 </html>
