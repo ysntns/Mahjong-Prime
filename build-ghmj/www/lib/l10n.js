@@ -1037,7 +1037,9 @@ document.webL10n = (function(window, document, undefined) {
             l10nArgs = element.getAttribute('data-l10n-args'),
             args = {};
         if (l10nArgs) try {
-          args = eval(l10nArgs); // XXX yeah, I know...
+          if (window.JSON && window.JSON.parse) {
+            args = window.JSON.parse(l10nArgs);
+          }
         } catch (e) {
           consoleWarn('could not parse arguments for #' + l10nId);
         }
@@ -1077,7 +1079,15 @@ document.webL10n = (function(window, document, undefined) {
         var scripts = document.getElementsByName('script');
         for (var i = 0; i < scripts.length; i++) {
           if (scripts[i].type == 'application/l10n') {
-            return eval(scripts[i].innerHTML);
+            if (window.JSON && window.JSON.parse) {
+              try {
+                return window.JSON.parse(scripts[i].innerHTML);
+              } catch (e) {
+                consoleWarn('could not parse l10n dictionary: ' + e);
+                return null;
+              }
+            }
+            return null;
           }
         }
         return null;
